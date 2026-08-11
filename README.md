@@ -4,7 +4,15 @@
 
 [![GDS Phases](https://img.shields.io/badge/GDS-Discovery%20%E2%86%92%20Alpha-blue)](https://www.gov.uk/service-manual/agile-delivery) [![Cloud: AWS](https://img.shields.io/badge/Cloud-AWS-orange)](https://aws.amazon.com) [![Draw.io](https://img.shields.io/badge/Diagrams-Draw.io-blue)](https://app.diagrams.net) [![Erwin](https://img.shields.io/badge/Modelling-Erwin%20Data%20Modeler-green)](https://erwin.com) [![Licence: MIT](https://img.shields.io/badge/Licence-MIT-lightgrey.svg)](LICENSE)
 
-[View repository tree](FILES.md)
+[View the current repository structure](FILES.md)
+
+---
+
+## Project Overview
+
+This repository is designed to support a Government Healthcare data architecture discovery engagement from initial assessment through to Alpha readiness. It provides a practical starter pack for documenting the current state, designing the target state, modelling core entities and flows, and preparing the governance and migration artefacts needed for delivery.
+
+The project is organised into structured sections for architecture, modelling, governance, migration, templates, and outputs. For the full directory map, see [FILES.md](FILES.md).
 
 ---
 
@@ -21,6 +29,18 @@ This repository provides a reusable, consultant-grade framework for delivering a
 - Alpha readiness assessment
 
 It is tool-specific: architecture diagrams are in **Draw.io** (`.drawio` XML), data models use **Erwin Data Modeler** DDL conventions, and cloud infrastructure is designed for **AWS**.
+
+## Visual Architecture Overview
+
+These diagrams help readers understand the design direction before diving into the templates and models.
+
+![Current State Architecture](architecture/images/Current%20State%20Architecture.png)
+
+![Target State Data Architecture](architecture/images/Target%20state%20Data%20Architecture.png)
+
+![Data Flow Diagram](architecture/images/Data%20Flow%20Diagram.png)
+
+![Integration Patterns](architecture/images/Integration%20Patterns.png)
 
 ---
 
