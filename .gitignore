@@ -1,0 +1,68 @@
+# ── NEVER commit these ──────────────────────────────────────
+# Credentials and secrets
+*.pem
+*.key
+*.env
+.env.*
+secrets.yml
+credentials.yml
+aws-credentials
+**/secrets/
+
+# Connection strings / config with passwords
+database.ini
+db_config.*
+connection_string.txt
+
+# ── Erwin files containing sensitive schema ─────────────────
+# Commit DDL exports instead (./data-modelling/ddl/)
+# *.erwin   ← uncomment if you want to exclude Erwin binary
+# *.erx
+
+# ── Local working files ─────────────────────────────────────
+*.tmp
+*.temp
+~$*              # MS Office temp files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Python ───────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+
+# ── Node (if any tooling added) ──────────────────────────────
+node_modules/
+npm-debug.log
+
+# ── IDE settings ─────────────────────────────────────────────
+.idea/
+.vscode/settings.json
+*.suo
+*.user
+
+# ── Data files — do NOT commit patient data ──────────────────
+# Raw data extracts
+outputs/raw-extracts/
+*.csv
+*.parquet
+*.xlsx
+!templates/*.xlsx   # Templates OK to commit
+
+# DMS log files
+*.log
+dms-*.json
+
+# ── Draw.io exports (commit source .drawio, not PNG exports) ─
+# Uncomment below if you prefer to exclude PNG exports:
+# outputs/*.png
+
+# ── AWS CLI output ───────────────────────────────────────────
+.aws/
+aws-cli-output.json

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Gov Health Data Discovery Template
+  File: 02_target_state_architecture.drawio
+  Purpose: Target state AWS-based data architecture (Medallion pattern)
+  Usage: Open at app.diagrams.net
+-->
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- Title -->
+    <mxCell id="title" value="Target State Data Architecture — Gov Health [Organisation]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#1F4E79;" vertex="1" parent="1">
+      <mxGeometry x="200" y="20" width="1200" height="40" as="geometry" />
+    </mxCell>
+    <mxCell id="subtitle" value="Target Architecture | AWS Medallion Pattern | Version 0.1 | [Date]" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="200" y="55" width="1200" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- ── AWS BOUNDARY BOX ──────────────────────────────────── -->
+    <mxCell id="aws_box" value="AWS Cloud (eu-west-2 — London)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=#FFFFFF;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+      <mxGeometry x="200" y="90" width="1250" height="760" as="geometry" />
+    </mxCell>
+
+    <!-- ── VPC BOUNDARY ─────────────────────────────────────── -->
+    <mxCell id="vpc" value="VPC — Private Subnets" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;strokeColor=#8C4FFF;fillColor=#F4F0FF;verticalLabelPosition=top;verticalAlign=bottom;align=center;html=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="220" y="230" width="1200" height="580" as="geometry" />
+    </mxCell>
+
+    <!-- ── LANE: SOURCE SYSTEMS (outside AWS) ─────────────────── -->
+    <mxCell id="sources_label" value="SOURCE SYSTEMS (External / On-Prem)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#b85450;" vertex="1" parent="1">
+      <mxGeometry x="30" y="100" width="160" height="50" as="geometry" />
+    </mxCell>
+
+    <mxCell id="src_pas" value="PAS" style="shape=mxgraph.aws4.traditional_server;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="30" y="160" width="60" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="src_epr" value="EPR" style="shape=mxgraph.aws4.traditional_server;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="100" y="160" width="60" height="70" as="geometry" />
+    </mxCell>
+    <mxCell id="src_lims" value="LIMS" style="shape=mxgraph.aws4.traditional_server;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="170" y="160" width="60" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- ── INGESTION LAYER ────────────────────────────────────── -->
+    <mxCell id="ingest_label" value="INGESTION" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#0070C0;" vertex="1" parent="1">
+      <mxGeometry x="240" y="250" width="180" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="api_gw" value="AWS API Gateway&#xa;(FHIR R4 Endpoint)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#E7157B;strokeColor=none;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="240" y="280" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="dms" value="AWS DMS&#xa;(DB Migration)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.database_migration_service;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#C7131F;strokeColor=none;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="320" y="280" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="s3_transfer" value="S3 Transfer&#xa;Acceleration" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#277116;strokeColor=none;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="400" y="280" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="lambda_ingest" value="AWS Lambda&#xa;(Validation)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#E7157B;strokeColor=none;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="480" y="280" width="60" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- ── BRONZE LAYER ────────────────────────────────────────── -->
+    <mxCell id="bronze_box" value="BRONZE LAYER — Raw Validated Data" style="swimlane;startSize=30;fillColor=#fef7e0;strokeColor=#d6b656;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="240" y="390" width="500" height="110" as="geometry" />
+    </mxCell>
+    <mxCell id="s3_raw" value="S3 — Raw Bucket&#xa;(Partitioned by date/source)&#xa;Encrypted: SSE-KMS" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#277116;strokeColor=none;fontSize=9;" vertex="1" parent="bronze_box">
+      <mxGeometry x="20" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="glue_catalog" value="AWS Glue&#xa;Data Catalog" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.glue;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#8C4FFF;strokeColor=none;fontSize=9;" vertex="1" parent="bronze_box">
+      <mxGeometry x="120" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="lake_formation" value="AWS Lake Formation&#xa;(Access Control + Governance)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lake_formation;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#277116;strokeColor=none;fontSize=9;" vertex="1" parent="bronze_box">
+      <mxGeometry x="220" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="macie" value="Amazon Macie&#xa;(PII Detection)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.macie;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#DD344C;strokeColor=none;fontSize=9;" vertex="1" parent="bronze_box">
+      <mxGeometry x="350" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- ── SILVER LAYER ────────────────────────────────────────── -->
+    <mxCell id="silver_box" value="SILVER LAYER — Cleansed &amp; Conformed" style="swimlane;startSize=30;fillColor=#e8f4f8;strokeColor=#6c8ebf;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="240" y="530" width="500" height="110" as="geometry" />
+    </mxCell>
+    <mxCell id="glue_etl" value="AWS Glue ETL&#xa;(Transform + Standardise&#xa;FHIR / SNOMED / ICD-10)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.glue;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#8C4FFF;strokeColor=none;fontSize=9;" vertex="1" parent="silver_box">
+      <mxGeometry x="20" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="rds_silver" value="AWS RDS&#xa;(PostgreSQL)&#xa;Conformed data" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.rds;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#C7131F;strokeColor=none;fontSize=9;" vertex="1" parent="silver_box">
+      <mxGeometry x="120" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="dq_lambda" value="Data Quality&#xa;Lambda Checks&#xa;(Great Expectations)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#E7157B;strokeColor=none;fontSize=9;" vertex="1" parent="silver_box">
+      <mxGeometry x="220" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- ── GOLD LAYER ──────────────────────────────────────────── -->
+    <mxCell id="gold_box" value="GOLD LAYER — Analytics-Ready Data Mart" style="swimlane;startSize=30;fillColor=#e2f5e2;strokeColor=#82b366;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="240" y="670" width="500" height="110" as="geometry" />
+    </mxCell>
+    <mxCell id="redshift" value="Amazon Redshift&#xa;Serverless&#xa;Star Schema Mart" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.redshift;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#277116;strokeColor=none;fontSize=9;" vertex="1" parent="gold_box">
+      <mxGeometry x="20" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="dbt" value="dbt Core&#xa;(Transformation Layer&#xa;&amp; Lineage)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="gold_box">
+      <mxGeometry x="120" y="40" width="80" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- ── GOVERNANCE SIDECAR ──────────────────────────────────── -->
+    <mxCell id="gov_box" value="GOVERNANCE &amp; SECURITY" style="swimlane;startSize=30;fillColor=#f0f0f0;strokeColor=#666666;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="810" y="390" width="220" height="390" as="geometry" />
+    </mxCell>
+    <mxCell id="purview" value="AWS CloudTrail&#xa;(Audit Logging)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudtrail;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#E7157B;strokeColor=none;fontSize=9;" vertex="1" parent="gov_box">
+      <mxGeometry x="20" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="iam" value="AWS IAM&#xa;(Role-Based Access)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.role;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#DD344C;strokeColor=none;fontSize=9;" vertex="1" parent="gov_box">
+      <mxGeometry x="120" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="kms" value="AWS KMS&#xa;(Encryption Keys)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#DD344C;strokeColor=none;fontSize=9;" vertex="1" parent="gov_box">
+      <mxGeometry x="20" y="130" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="cloudwatch" value="CloudWatch&#xa;(Monitoring)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#E7157B;strokeColor=none;fontSize=9;" vertex="1" parent="gov_box">
+      <mxGeometry x="120" y="130" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="guardduty" value="GuardDuty&#xa;(Threat Detection)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.guardduty;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#DD344C;strokeColor=none;fontSize=9;" vertex="1" parent="gov_box">
+      <mxGeometry x="20" y="220" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="secretsmanager" value="Secrets Manager&#xa;(Credentials)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.secrets_manager;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#DD344C;strokeColor=none;fontSize=9;" vertex="1" parent="gov_box">
+      <mxGeometry x="120" y="220" width="60" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- ── CONSUMPTION ─────────────────────────────────────────── -->
+    <mxCell id="consume_box" value="CONSUMPTION" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+      <mxGeometry x="1090" y="390" width="340" height="390" as="geometry" />
+    </mxCell>
+    <mxCell id="quicksight" value="Amazon QuickSight&#xa;Operational Dashboards" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.quicksight;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#8C4FFF;strokeColor=none;fontSize=9;" vertex="1" parent="consume_box">
+      <mxGeometry x="20" y="40" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="powerbi_target" value="Power BI&#xa;Executive Reporting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="consume_box">
+      <mxGeometry x="120" y="40" width="80" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="api_consume" value="Data API&#xa;(Lambda + API GW)&#xa;Analyst / Researcher" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#E7157B;strokeColor=none;fontSize=9;" vertex="1" parent="consume_box">
+      <mxGeometry x="20" y="150" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="nhse_api" value="NHSE / NHSD&#xa;Statutory Submissions&#xa;Automated" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="consume_box">
+      <mxGeometry x="120" y="150" width="80" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- ── ORCHESTRATION ─────────────────────────────────────── -->
+    <mxCell id="stepfunctions" value="AWS Step Functions&#xa;(Pipeline Orchestration)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.step_functions;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#E7157B;strokeColor=none;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="790" y="280" width="60" height="60" as="geometry" />
+    </mxCell>
+    <mxCell id="eventbridge" value="EventBridge&#xa;(Event Routing)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;labelBackgroundColor=#ffffff;sketch=0;fontStyle=0;fillColor=#E7157B;strokeColor=none;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="870" y="280" width="60" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- Flow arrows between layers -->
+    <mxCell id="f1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#277116;strokeWidth=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="lambda_ingest" target="bronze_box">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#6c8ebf;strokeWidth=2;" edge="1" parent="1" source="bronze_box" target="silver_box">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="f3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="silver_box" target="gold_box">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>

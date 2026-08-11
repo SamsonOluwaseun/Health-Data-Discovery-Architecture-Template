@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Gov Health Data Discovery Template
+  File: 04_integration_patterns.drawio
+  Purpose: Four standard integration patterns for Gov Health environments
+  Usage: Open at app.diagrams.net
+-->
+<mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <mxCell id="title" value="Integration Patterns — Gov Health Data Platform" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#1F4E79;" vertex="1" parent="1">
+      <mxGeometry x="200" y="20" width="1200" height="40" as="geometry" />
+    </mxCell>
+
+    <!-- ══ PATTERN 1: FHIR API ═════════════════════════════════ -->
+    <mxCell id="p1_box" value="Pattern 1 — FHIR R4 API Integration" style="swimlane;startSize=35;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="30" y="80" width="780" height="200" as="geometry" />
+    </mxCell>
+    <mxCell id="p1_src" value="GP System&#xa;/ PDS&#xa;(Source)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="p1_box">
+      <mxGeometry x="20" y="60" width="100" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p1_apigw" value="AWS API Gateway&#xa;FHIR R4 Endpoint&#xa;/Patient&#xa;/Observation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="p1_box">
+      <mxGeometry x="180" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p1_lambda" value="Lambda&#xa;Validate + Map&#xa;to FHIR schema" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="p1_box">
+      <mxGeometry x="360" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p1_s3" value="S3 Raw Bucket&#xa;FHIR JSON&#xa;Partitioned" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="p1_box">
+      <mxGeometry x="540" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p1_label" value="Protocol: REST HTTPS | Auth: OAuth2 / API Key | Frequency: Real-time / Event | Standard: HL7 FHIR R4" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#666666;" vertex="1" parent="p1_box">
+      <mxGeometry x="20" y="155" width="740" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="p1_e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#6c8ebf;strokeWidth=2;" edge="1" parent="p1_box" source="p1_src" target="p1_apigw">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="p1_e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#6c8ebf;strokeWidth=2;" edge="1" parent="p1_box" source="p1_apigw" target="p1_lambda">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="p1_e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#6c8ebf;strokeWidth=2;" edge="1" parent="p1_box" source="p1_lambda" target="p1_s3">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ══ PATTERN 2: BATCH FILE SFTP → S3 ════════════════════ -->
+    <mxCell id="p2_box" value="Pattern 2 — Batch File Transfer (SFTP → S3)" style="swimlane;startSize=35;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="830" y="80" width="780" height="200" as="geometry" />
+    </mxCell>
+    <mxCell id="p2_src" value="Source System&#xa;(LIMS / Finance)&#xa;CSV / XML Batch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="p2_box">
+      <mxGeometry x="20" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p2_sftp" value="SFTP Server&#xa;(AWS Transfer Family)&#xa;Encrypted transit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="p2_box">
+      <mxGeometry x="200" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p2_lambda" value="S3 Event Trigger&#xa;Lambda&#xa;Validate + Classify" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="p2_box">
+      <mxGeometry x="380" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p2_glue" value="AWS Glue&#xa;Transform + Load&#xa;Bronze → Silver" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="p2_box">
+      <mxGeometry x="560" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p2_label" value="Protocol: SFTP / FTPS | Auth: SSH Key | Frequency: Daily Batch | Encryption: SSE-KMS | Format: CSV / HL7 v2" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#666666;" vertex="1" parent="p2_box">
+      <mxGeometry x="20" y="155" width="740" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="p2_e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d6b656;strokeWidth=2;" edge="1" parent="p2_box" source="p2_src" target="p2_sftp">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="p2_e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d6b656;strokeWidth=2;" edge="1" parent="p2_box" source="p2_sftp" target="p2_lambda">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="p2_e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="p2_box" source="p2_lambda" target="p2_glue">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ══ PATTERN 3: DB REPLICATION ═══════════════════════════ -->
+    <mxCell id="p3_box" value="Pattern 3 — Database Replication (AWS DMS)" style="swimlane;startSize=35;fillColor=#f0f0f0;strokeColor=#666666;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="30" y="310" width="780" height="200" as="geometry" />
+    </mxCell>
+    <mxCell id="p3_src" value="Source DB&#xa;(SQL Server / Oracle)&#xa;On-Prem" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="p3_box">
+      <mxGeometry x="20" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p3_dms" value="AWS DMS&#xa;CDC Replication&#xa;Full Load + Ongoing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#666666;fontSize=9;" vertex="1" parent="p3_box">
+      <mxGeometry x="200" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p3_rds" value="AWS RDS&#xa;(PostgreSQL)&#xa;Silver Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="p3_box">
+      <mxGeometry x="380" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p3_redshift" value="Amazon Redshift&#xa;Gold Layer&#xa;Analytics Mart" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="p3_box">
+      <mxGeometry x="560" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p3_label" value="Protocol: JDBC | Method: CDC (Change Data Capture) | Frequency: Near-real-time | Network: Direct Connect / VPN" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#666666;" vertex="1" parent="p3_box">
+      <mxGeometry x="20" y="155" width="740" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="p3_e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#666666;strokeWidth=2;" edge="1" parent="p3_box" source="p3_src" target="p3_dms">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="p3_e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="p3_box" source="p3_dms" target="p3_rds">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="p3_e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="p3_box" source="p3_rds" target="p3_redshift">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ══ PATTERN 4: EVENT-DRIVEN ════════════════════════════ -->
+    <mxCell id="p4_box" value="Pattern 4 — Event-Driven (SNS / SQS for Clinical Alerts)" style="swimlane;startSize=35;fillColor=#e2f5e2;strokeColor=#82b366;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+      <mxGeometry x="830" y="310" width="780" height="200" as="geometry" />
+    </mxCell>
+    <mxCell id="p4_src" value="Clinical System&#xa;Event Source&#xa;(e.g. EPR trigger)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="p4_box">
+      <mxGeometry x="20" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p4_eb" value="EventBridge&#xa;Event Bus&#xa;Rule-based routing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2f5e2;strokeColor=#82b366;fontSize=9;" vertex="1" parent="p4_box">
+      <mxGeometry x="200" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p4_sqs" value="SQS Queue&#xa;Decouple + Buffer&#xa;DLQ enabled" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2f5e2;strokeColor=#82b366;fontSize=9;" vertex="1" parent="p4_box">
+      <mxGeometry x="380" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p4_lambda" value="Lambda Consumer&#xa;Process + Store&#xa;Alert / Notify" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e2f5e2;strokeColor=#82b366;fontSize=9;" vertex="1" parent="p4_box">
+      <mxGeometry x="560" y="60" width="120" height="80" as="geometry" />
+    </mxCell>
+    <mxCell id="p4_label" value="Use Case: Critical lab result alerts, referral status updates | Latency: &lt;5 seconds | Pattern: Pub/Sub" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#666666;" vertex="1" parent="p4_box">
+      <mxGeometry x="20" y="155" width="740" height="30" as="geometry" />
+    </mxCell>
+    <mxCell id="p4_e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="p4_box" source="p4_src" target="p4_eb">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="p4_e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="p4_box" source="p4_eb" target="p4_sqs">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="p4_e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="p4_box" source="p4_sqs" target="p4_lambda">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
