@@ -4,6 +4,8 @@
 
 [![GDS Phases](https://img.shields.io/badge/GDS-Discovery%20%E2%86%92%20Alpha-blue)](https://www.gov.uk/service-manual/agile-delivery) [![Cloud: AWS](https://img.shields.io/badge/Cloud-AWS-orange)](https://aws.amazon.com) [![Draw.io](https://img.shields.io/badge/Diagrams-Draw.io-blue)](https://app.diagrams.net) [![Erwin](https://img.shields.io/badge/Modelling-Erwin%20Data%20Modeler-green)](https://erwin.com) [![Licence: MIT](https://img.shields.io/badge/Licence-MIT-lightgrey.svg)](LICENSE)
 
+[View repository tree](FILES.md)
+
 ---
 
 ## What This Template Is
