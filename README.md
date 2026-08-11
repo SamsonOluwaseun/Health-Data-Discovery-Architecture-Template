@@ -36,11 +36,19 @@ These diagrams help readers understand the design direction before diving into t
 
 ![Current State Architecture](architecture/images/Current%20State%20Architecture.png)
 
+*Figure 1: Current state architecture showing the existing healthcare systems, data sources, and the broader operating landscape before target-state design.*
+
 ![Target State Data Architecture](architecture/images/Target%20state%20Data%20Architecture.png)
+
+*Figure 2: Target state data architecture illustrating the future, cloud-aligned design for data ingestion, transformation, storage, and reporting.*
 
 ![Data Flow Diagram](architecture/images/Data%20Flow%20Diagram.png)
 
+*Figure 3: Data flow diagram covering the three core health data journeys: patient demographics, lab results, and referral pathways.*
+
 ![Integration Patterns](architecture/images/Integration%20Patterns.png)
+
+*Figure 4: Integration patterns showing how systems exchange data, trigger events, and connect operational and analytical services across the architecture.*
 
 ---
 
