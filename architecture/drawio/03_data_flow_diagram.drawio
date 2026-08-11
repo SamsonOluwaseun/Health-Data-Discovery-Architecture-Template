@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Gov Health Data Discovery Template
+  File: 03_data_flow_diagram.drawio
+  Purpose: End-to-end data flow diagram — 3 critical health data journeys
+  Usage: Open at app.diagrams.net → File → Open from Device
+  Customise: Replace [SYSTEM] labels with actual system names
+  
+  Three journeys shown:
+    Journey 1 — Patient Demographics (PAS → Analytics)
+    Journey 2 — Lab Results (LIMS → Clinician → Reporting)
+    Journey 3 — Referral Pathway (GP → Acute → RTT Dashboard)
+-->
+<mxGraphModel dx="1654" dy="826" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+
+    <!-- ── TITLE ─────────────────────────────────────────────── -->
+    <mxCell id="title" value="Data Flow Diagram — Critical Health Data Journeys" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#1F4E79;" vertex="1" parent="1">
+      <mxGeometry x="200" y="15" width="1200" height="35" as="geometry" />
+    </mxCell>
+    <mxCell id="sub" value="Gov Health Discovery Template | Version 0.1 | [Date] | ⬛ External   🟦 Internal System   🟩 AWS Platform   🟨 Output / Consumption" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#666666;" vertex="1" parent="1">
+      <mxGeometry x="200" y="48" width="1200" height="20" as="geometry" />
+    </mxCell>
+
+    <!-- ════════════════════════════════════════════════════════
+         JOURNEY 1 — Patient Demographics
+         PAS → DMS → S3 Raw → Glue → RDS Silver → Gold → Power BI
+         ════════════════════════════════════════════════════════ -->
+
+    <mxCell id="j1_header" value="JOURNEY 1 — Patient Demographics: PAS → Analytics Platform" style="text;html=1;strokeColor=#1F4E79;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="85" width="1580" height="30" as="geometry" />
+    </mxCell>
+
+    <!-- Nodes J1 -->
+    <mxCell id="j1_pas" value="PAS&#xa;(Patient Admin System)&#xa;SQL Server 2016&#xa;~500K patients" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="130" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j1_dms" value="AWS DMS&#xa;CDC Replication&#xa;Daily + ongoing&#xa;Port 1433 → S3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="220" y="130" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j1_s3raw" value="S3 — Raw Bucket&#xa;/patient/yyyy/mm/dd/&#xa;Format: JSON (FHIR)&#xa;Encrypted: SSE-KMS" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="410" y="130" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j1_macie" value="Amazon Macie&#xa;PII scan on ingest&#xa;Alert if unexpected&#xa;PII found" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="410" y="220" width="130" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j1_glue" value="AWS Glue ETL&#xa;Transform + Validate&#xa;NHS Number Luhn check&#xa;Pseudonymise name/address" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="600" y="130" width="140" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j1_dq" value="DQ Check Lambda&#xa;Completeness ≥ 95%&#xa;NHS Number valid&#xa;Log to DQ table" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="600" y="220" width="140" height="60" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j1_rds" value="RDS PostgreSQL&#xa;silver.patient&#xa;Conformed, coded&#xa;NHS DD standard" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="800" y="130" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j1_redshift" value="Redshift Gold&#xa;dim_patient mart&#xa;Age band, geography&#xa;Anonymised aggregates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="990" y="130" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j1_powerbi" value="Power BI&#xa;Population Health&#xa;Dashboard&#xa;(anonymised)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="1180" y="130" width="120" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j1_nhse" value="NHSE Submission&#xa;SUS / HES&#xa;Monthly statutory&#xa;Automated extract" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="1360" y="130" width="120" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows J1 -->
+    <mxCell id="j1e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#b85450;strokeWidth=2;exitX=1;exitY=0.5;" edge="1" parent="1" source="j1_pas" target="j1_dms">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j1e1lbl" value="SQL CDC&#xa;Encrypted&#xa;Direct Connect" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j1e1">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j1e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j1_dms" target="j1_s3raw">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j1e2lbl" value="JSON / Parquet&#xa;SSE-KMS" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j1e2">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j1e2b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d6b656;strokeWidth=1;dashed=1;" edge="1" parent="1" source="j1_s3raw" target="j1_macie">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j1e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j1_s3raw" target="j1_glue">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j1e3lbl" value="S3 Event Trigger&#xa;Step Functions" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j1e3">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j1e3b" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d6b656;strokeWidth=1;dashed=1;" edge="1" parent="1" source="j1_glue" target="j1_dq">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j1e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j1_glue" target="j1_rds">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j1e4lbl" value="JDBC write&#xa;silver schema" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j1e4">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j1e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j1_rds" target="j1_redshift">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j1e5lbl" value="dbt transform&#xa;aggregation" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j1e5">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j1e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d6b656;strokeWidth=2;" edge="1" parent="1" source="j1_redshift" target="j1_powerbi">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j1e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d6b656;strokeWidth=2;" edge="1" parent="1" source="j1_redshift" target="j1_nhse">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ════════════════════════════════════════════════════════
+         JOURNEY 2 — Lab Results: LIMS → Clinical Review → Reporting
+         ════════════════════════════════════════════════════════ -->
+
+    <mxCell id="j2_header" value="JOURNEY 2 — Lab Results: LIMS → Critical Value Alert + Analytics" style="text;html=1;strokeColor=#375623;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="310" width="1580" height="30" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j2_lims" value="LIMS&#xa;(Lab Info Mgmt)&#xa;PostgreSQL 12&#xa;~12M results" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="360" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j2_glue_ingest" value="AWS Glue&#xa;LIMS Connector&#xa;PostgreSQL JDBC&#xa;Incremental by date" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="220" y="360" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j2_s3" value="S3 Raw Bucket&#xa;/lab-results/&#xa;SNOMED CT coded&#xa;JSON format" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="410" y="360" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j2_lambda_critical" value="Lambda — Critical Value&#xa;Detect is_critical=TRUE&#xa;→ EventBridge alert&#xa;→ SNS notify clinician" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="410" y="450" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j2_glue_transform" value="AWS Glue ETL&#xa;Map SNOMED codes&#xa;Calculate abnormal flags&#xa;Link to patient SK" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="600" y="360" width="140" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j2_rds_silver" value="RDS Silver&#xa;silver.lab_result&#xa;silver.specimen&#xa;Linked to patient" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="800" y="360" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j2_redshift_gold" value="Redshift Gold&#xa;fact_lab_results&#xa;Turnaround times&#xa;Abnormal rate KPIs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="990" y="360" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j2_pathology_dash" value="Pathology&#xa;Dashboard&#xa;(Power BI)&#xa;TAT, volume, QC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="1180" y="360" width="120" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j2_clinician" value="Clinician&#xa;SMS / Email Alert&#xa;Critical result&#xa;&lt;30 min SLA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="600" y="450" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows J2 -->
+    <mxCell id="j2e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j2_lims" target="j2_glue_ingest">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j2e1lbl" value="JDBC incremental&#xa;by result_date" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j2e1">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j2e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j2_glue_ingest" target="j2_s3">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j2e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#b85450;strokeWidth=2;dashed=1;" edge="1" parent="1" source="j2_s3" target="j2_lambda_critical">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j2e3lbl" value="S3 trigger on&#xa;critical=TRUE" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#b85450;" vertex="1" connectable="0" parent="j2e3">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j2e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j2_s3" target="j2_glue_transform">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j2e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#b85450;strokeWidth=2;" edge="1" parent="1" source="j2_lambda_critical" target="j2_clinician">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j2e5lbl" value="SNS → SMS / Email&#xa;&lt;30 min SLA" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#b85450;" vertex="1" connectable="0" parent="j2e5">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j2e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j2_glue_transform" target="j2_rds_silver">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j2e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j2_rds_silver" target="j2_redshift_gold">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j2e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d6b656;strokeWidth=2;" edge="1" parent="1" source="j2_redshift_gold" target="j2_pathology_dash">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+
+    <!-- ════════════════════════════════════════════════════════
+         JOURNEY 3 — Referral Pathway: GP → Acute → RTT Dashboard
+         ════════════════════════════════════════════════════════ -->
+
+    <mxCell id="j3_header" value="JOURNEY 3 — Referral Pathway: GP System → Acute Trust → RTT Dashboard" style="text;html=1;strokeColor=#6c3483;fillColor=#f4ecf7;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="545" width="1580" height="30" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j3_gp" value="GP System&#xa;(Primary Care)&#xa;EMIS / SystmOne&#xa;e-RS referral" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8daef;strokeColor=#6c3483;fontSize=9;fontStyle=1;" vertex="1" parent="1">
+      <mxGeometry x="30" y="595" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j3_ers" value="NHS e-RS&#xa;(e-Referral Service)&#xa;UBRN generated&#xa;GP Connect / FHIR" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8daef;strokeColor=#6c3483;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="220" y="595" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j3_apigw" value="AWS API Gateway&#xa;FHIR R4 Endpoint&#xa;/Referral resource&#xa;Auth: NHS Login" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="410" y="595" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j3_lambda" value="Lambda&#xa;Validate referral&#xa;Set RTT clock start&#xa;Check specialty code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="600" y="595" width="140" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j3_s3" value="S3 Raw Bucket&#xa;/referrals/&#xa;FHIR ServiceRequest&#xa;JSON" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="800" y="595" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j3_glue" value="AWS Glue&#xa;Map to silver.referral&#xa;Calculate RTT weeks&#xa;Flag 18wk breach" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="990" y="595" width="140" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j3_rds" value="RDS Silver&#xa;silver.referral&#xa;RTT fields complete&#xa;Breach flag computed" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="1190" y="595" width="130" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j3_rtt_dash" value="RTT Dashboard&#xa;Power BI&#xa;18-week breaches&#xa;Pathway waiting" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="1390" y="595" width="120" height="70" as="geometry" />
+    </mxCell>
+
+    <mxCell id="j3_nhse_rtt" value="NHSE RTT Return&#xa;Monthly submission&#xa;18-week standard&#xa;Automated" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="1390" y="685" width="120" height="60" as="geometry" />
+    </mxCell>
+
+    <!-- Arrows J3 -->
+    <mxCell id="j3e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#6c3483;strokeWidth=2;" edge="1" parent="1" source="j3_gp" target="j3_ers">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j3e1lbl" value="FHIR ServiceRequest&#xa;e-RS submission" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j3e1">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j3e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j3_ers" target="j3_apigw">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j3e2lbl" value="REST FHIR R4&#xa;TLS / OAuth2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j3e2">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j3e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j3_apigw" target="j3_lambda">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j3e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j3_lambda" target="j3_s3">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j3e4lbl" value="Validated FHIR&#xa;JSON to S3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j3e4">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+    <mxCell id="j3e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j3_s3" target="j3_glue">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j3e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#82b366;strokeWidth=2;" edge="1" parent="1" source="j3_glue" target="j3_rds">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j3e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d6b656;strokeWidth=2;" edge="1" parent="1" source="j3_rds" target="j3_rtt_dash">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j3e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#d6b656;strokeWidth=2;dashed=1;" edge="1" parent="1" source="j3_rds" target="j3_nhse_rtt">
+      <mxGeometry relative="1" as="geometry" />
+    </mxCell>
+    <mxCell id="j3e7lbl" value="Direct Connect&#xa;read-only analyst" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=8;fontColor=#666666;" vertex="1" connectable="0" parent="j3e7">
+      <mxGeometry x="-0.1" relative="1" as="geometry"><mxPoint as="offset"/></mxGeometry>
+    </mxCell>
+
+    <!-- ── LATENCY / SLA ANNOTATIONS ──────────────────────────── -->
+    <mxCell id="sla1" value="SLA: Patient data available in Gold within 24h of PAS update" style="text;html=1;strokeColor=#1F4E79;fillColor=#dae8fc;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="30" y="220" width="380" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="sla2" value="SLA: Critical lab result alert delivered to clinician within 30 minutes of LIMS update" style="text;html=1;strokeColor=#375623;fillColor=#d5e8d4;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="30" y="535" width="460" height="25" as="geometry" />
+    </mxCell>
+    <mxCell id="sla3" value="SLA: RTT data refreshed daily by 06:00; breach alerts same-day" style="text;html=1;strokeColor=#6c3483;fillColor=#f4ecf7;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=9;" vertex="1" parent="1">
+      <mxGeometry x="30" y="770" width="380" height="25" as="geometry" />
+    </mxCell>
+
+  </root>
+</mxGraphModel>
